@@ -1,13 +1,20 @@
+const crypto = require('crypto');
+
 const generateProof = (previousProof) => {
-  let proof = previousProof + 1;
+  let proof = Math.random() * 10000000001;
   while (!isProofValid(previousProof, proof)) {
-    proof += 1;
+    proof = Math.random() * 10000000001;
   }
   return proof;
 };
 
 const isProofValid = (previousProof, currentProof) => {
-  if ((currentProof - previousProof) % 5 === 0) {
+  const difference = currentProof - previousProof;
+  const proofString = `difference-${difference}`;
+  const hashFunction = crypto.createHash('sha256');
+  hashFunction.update(proofString);
+  const hexString = hashFunction.digest('hex');
+  if (hexString.includes('0000000')) {
     return true;
   }
   return false;
