@@ -10,17 +10,15 @@ class Blockchain {
 
   mineBlock(block) {
     this.blocks.push(block);
+    this.currentTransactions = [];
   }
 
   newTransaction(transaction) {
     this.currentTransactions.push(transaction);
-    if (this.currentTransactions.length > 1) {
+    if (this.currentTransactions.length === 2) {
       const previousBlock = this.lastBlock();
       const block = new Block(previousBlock.getIndex() + 1, previousBlock.hashValue(), previousBlock.getProof(), this.currentTransactions);
       this.mineBlock(block);
-      console.log('Chain: ');
-      console.log(this.blocks);
-      this.currentTransactions = [];
     }
   }
 
@@ -49,9 +47,7 @@ class Blockchain {
   }
 
   printBlocks() {
-    this.blocks.forEach((block) => {
-      console.log(block);
-    });
+    this.blocks.forEach(block => console.log(block));
   }
 }
 

@@ -41,6 +41,10 @@ class Block {
       transactions,
     };
   }
+
+  printTransactions() {
+    this.transactions.forEach(transaction => console.log(transaction));
+  }
 }
 
 module.exports = Block;
