@@ -1,17 +1,45 @@
 const app = require('express')();
-const httpServer = require('http').Server(app);
-const io = require('socket.io')(httpServer);
+const bodyParser = require('body-parser');
+const axios = require('axios');
 
-const PORT = 5000;
+const { PORT } = process.env;
+
+const nodes = [`http://localhost:${PORT}`];
+
+app.use(bodyParser.json());
 
 app.get('/', (_, res) => {
   res.end('Hello World!!');
-  io.emit('Request Hit');
 });
 
-io.on('connection', (socket) => {
-  console.log(`User connected: ${socket.id}`);
-  socket.on('disconnect', () => console.log(`User disconnected: ${socket.id}`));
+app.post('/addNode', (req, res) => {
+  const { host, port } = req.body;
+  const node = `http://${host}:${port}`;
+  nodes.push(node);
+  axios.post(`${node}/addNodeCallback`, {
+    host: req.hostname,
+    port: PORT,
+  });
+  console.info(`Added node ${node}`);
+  res.json({ status: 'Added node' }).end();
 });
 
-httpServer.listen(PORT, () => console.log(`Listening on ${PORT}...`));
+app.post('/addNodeCallback', (req, res) => {
+  const { host, port } = req.body;
+  const node = `http://${host}:${port}`;
+  nodes.push(node);
+  console.info(`Added node ${node} back`);
+  res.json({ status: 'Added node Back' }).end();
+});
+
+app.post('/triggerNode', (_, res) => {
+  nodes.forEach((node) => axios.get(`${node}/triggered`));
+  res.end();
+});
+
+app.get('/triggered', (_, res) => {
+  console.log(`Triggered Node ${PORT}`);
+  res.end('Triggered');
+});
+
+app.listen(PORT, () => console.info(`Express server running on ${PORT}...`));

@@ -3,8 +3,8 @@ const Block = require('./block');
 const { isProofValid } = require('../utils/proof');
 
 class Blockchain {
-  constructor(initialBlock) {
-    this.blocks = [initialBlock];
+  constructor() {
+    this.blocks = [new Block(0, 1, 0, [])];
     this.currentTransactions = [];
   }
 
