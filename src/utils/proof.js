@@ -1,11 +1,15 @@
 const crypto = require('crypto');
 
+
 const generateProof = (previousProof) => {
   let proof = Math.random() * 10000000001;
-  while (!isProofValid(previousProof, proof)) {
-    proof = Math.random() * 10000000001;
+  if (isProofValid(previousProof, proof) || process.env.BREAK === 'true') {
+    console.log(`Proof Valid: ${isProofValid(previousProof, proof)}`);
+    console.log(`Break: ${process.env.BREAK}`);
+    return proof;
+  } else  {
+    return () => generateProof(previousProof);
   }
-  return proof;
 };
 
 const isProofValid = (previousProof, currentProof) => {

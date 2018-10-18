@@ -6,7 +6,7 @@ const { generateProof } = require('../utils/proof');
 class Block {
   constructor(index, previousBlockHash, previousProof, transactions) {
     this.index = index;
-    this.proof = generateProof(previousProof);
+    this.proof = (index === 0) ? previousProof : generateProof(previousProof);
     this.previousBlockHash = previousBlockHash;
     this.transactions = transactions;
     this.timestamp = Date.now();
