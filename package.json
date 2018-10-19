@@ -9,9 +9,14 @@
     "kill": "pm2 flush && pm2 kill",
     "flush": "pm2 flush"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "blockchain",
+    "express",
+    "socket",
+    "websocket"
+  ],
+  "author": "Adarsh",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",

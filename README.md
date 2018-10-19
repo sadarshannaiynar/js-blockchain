@@ -79,3 +79,7 @@ Response:
     ]
   },
 ```
+
+LICENSE
+===
+[MIT](LICENSE.md)
