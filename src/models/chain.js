@@ -2,7 +2,7 @@ const Block = require('./block');
 
 const actions = require('../constants');
 
-const { isProofValid } = require('../utils/proof');
+const { generateProof, isProofValid } = require('../utils/proof');
 
 class Blockchain {
   constructor(blocks, io) {
@@ -17,20 +17,24 @@ class Blockchain {
   }
 
   mineBlock(block) {
-    this.currentTransactions = [];
     this.blocks.push(block);
-    console.log('Mining Ended...');
+    console.log('Mined Successfully');
     this.io.emit(actions.END_MINING, this.toArray());
   }
 
-  newTransaction(transaction) {
+  async newTransaction(transaction) {
     this.currentTransactions.push(transaction);
     if (this.currentTransactions.length === 2) {
       console.info('Starting mining block...');
       const previousBlock = this.lastBlock();
       process.env.BREAK = false;
       const block = new Block(previousBlock.getIndex() + 1, previousBlock.hashValue(), previousBlock.getProof(), this.currentTransactions);
-      this.mineBlock(block);
+      const { proof, dontMine } = await generateProof(previousBlock.getProof());
+      block.setProof(proof);
+      this.currentTransactions = [];
+      if (dontMine !== 'true') {
+        this.mineBlock(block);
+      }
     }
   }
 

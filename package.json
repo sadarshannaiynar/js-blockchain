@@ -7,8 +7,7 @@
     "start": "pm2 startOrReload ecosystem.json --update-env && npm run logs",
     "logs": "pm2 logs",
     "kill": "pm2 flush && pm2 kill",
-    "flush": "pm2 flush",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "flush": "pm2 flush"
   },
   "keywords": [],
   "author": "",

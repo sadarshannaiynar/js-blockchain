@@ -1,12 +1,11 @@
 const crypto = require('crypto');
 
 const Transaction = require('./transaction');
-const { generateProof } = require('../utils/proof');
 
 class Block {
   constructor(index, previousBlockHash, previousProof, transactions) {
     this.index = index;
-    this.proof = (index === 0) ? previousProof : generateProof(previousProof);
+    this.proof = previousProof;
     this.previousBlockHash = previousBlockHash;
     this.transactions = transactions;
     this.timestamp = Date.now();
@@ -18,6 +17,10 @@ class Block {
     const hashFunction = crypto.createHash('sha256');
     hashFunction.update(blockString);
     return hashFunction.digest('hex');
+  }
+
+  setProof(proof) {
+    this.proof = proof;
   }
 
   getProof() {

@@ -41,6 +41,10 @@ app.post('/transaction', (req, res) => {
   res.json({ message: 'transaction success' }).end();
 });
 
+app.get('/chain', (req, res) => {
+  res.json(blockChain.toArray()).end();
+});
+
 io.on('connection', (socket) => {
   console.info(`Socket connected, ID: ${socket.id}`);
   socket.on('disconnect', () => {
